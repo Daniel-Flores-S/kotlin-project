@@ -1,0 +1,7 @@
+spring:
+    hebernate:
+        dbl-auto: update
+    datasource:
+        url: jdbc:mysql://localhost:3306/bookMarket?createDatabaseIfNotExist=true
+        username: root
+        password: 35716134da
