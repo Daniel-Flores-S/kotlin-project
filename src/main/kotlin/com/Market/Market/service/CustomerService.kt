@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class CustomerService(val customerRepository: CustomerRepository) {
-    val customers = mutableListOf<CustomerModel>()
 
     fun getAll(name: String?): List<CustomerModel> {
         name?.let {
@@ -19,8 +18,8 @@ class CustomerService(val customerRepository: CustomerRepository) {
         customerRepository.save(customer)
     }
 
-    fun getCustomer(id: Int): CustomerModel {
-        return customerRepository.findById(id).get()
+    fun findById(id: Int): CustomerModel {
+        return customerRepository.findById(id).orElseThrow()
     }
 
     fun update(customer: CustomerModel) {
