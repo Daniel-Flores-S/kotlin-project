@@ -5,16 +5,17 @@ import com.Market.Market.controller.request.PostCustomerReqest
 import com.Market.Market.controller.request.PutBookRequest
 import com.Market.Market.controller.request.PutCustomerReqest
 import com.Market.Market.enums.BookStatus
+import com.Market.Market.enums.CustomerStatus
 import com.Market.Market.modal.BookModel
 import com.Market.Market.modal.CustomerModel
 import java.math.BigDecimal
 
 fun PostCustomerReqest.toCustomerModel(): CustomerModel {
-    return CustomerModel(name = this.name, email = this.email)
+    return CustomerModel(name = this.name, email = this.email, status = CustomerStatus.ATIVO)
 }
 
-fun PutCustomerReqest.toCustomerModel(id: Int): CustomerModel {
-    return CustomerModel(id = id, name = this.name, email = this.email)
+fun PutCustomerReqest.toCustomerModel(previousValue: CustomerModel): CustomerModel {
+    return CustomerModel(id = previousValue.id, name = this.name, email = this.email, status = previousValue.status)
 }
 
 fun PostBookRequest.toBookModel(customer: CustomerModel): BookModel {
@@ -31,7 +32,7 @@ fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel {
         id = previousValue.id,
         name = this.name ?: previousValue.name,
         //Convert BigDecimal
-        price =  BigDecimal(this.price ?: previousValue.price.toString()),
+        price = BigDecimal(this.price ?: previousValue.price.toString()),
         status = previousValue.status,
         customer = previousValue.customer
     )

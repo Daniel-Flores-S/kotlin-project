@@ -1,5 +1,6 @@
 package com.Market.Market.modal
 
+import com.Market.Market.enums.CustomerStatus
 import javax.persistence.*
 
 
@@ -14,5 +15,10 @@ data class CustomerModel(
     var name: String,
 
     @Column
-    var email: String
+    var email: String,
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    var status: CustomerStatus
+
 )
