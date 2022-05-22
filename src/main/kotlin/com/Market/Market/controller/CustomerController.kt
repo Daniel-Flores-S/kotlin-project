@@ -2,8 +2,9 @@ package com.Market.Market.controller
 
 import com.Market.Market.controller.request.PostCustomerReqest
 import com.Market.Market.controller.request.PutCustomerReqest
+import com.Market.Market.controller.response.CustomerResponse
 import com.Market.Market.extension.toCustomerModel
-import com.Market.Market.modal.CustomerModel
+import com.Market.Market.extension.toResponse
 import com.Market.Market.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -14,8 +15,8 @@ class CustomerController(val customerService : CustomerService
 ) {
 
     @GetMapping
-    fun getAll(@RequestParam name: String?): List<CustomerModel> {
-        return customerService.getAll(name)
+    fun getAll(@RequestParam name: String?): List<CustomerResponse> {
+        return customerService.getAll(name).map { it.toResponse()}
     }
 
     @PostMapping
@@ -25,8 +26,8 @@ class CustomerController(val customerService : CustomerService
     }
 
     @GetMapping("/{id}")
-    fun getCustomer(@PathVariable id: Int): CustomerModel {
-        return customerService.findById(id)
+    fun getCustomer(@PathVariable id: Int): CustomerResponse {
+        return customerService.findById(id).toResponse()
     }
 
     @PutMapping("/{id}")

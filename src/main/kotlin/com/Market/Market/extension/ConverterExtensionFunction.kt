@@ -4,6 +4,8 @@ import com.Market.Market.controller.request.PostBookRequest
 import com.Market.Market.controller.request.PostCustomerReqest
 import com.Market.Market.controller.request.PutBookRequest
 import com.Market.Market.controller.request.PutCustomerReqest
+import com.Market.Market.controller.response.BookResponse
+import com.Market.Market.controller.response.CustomerResponse
 import com.Market.Market.enums.BookStatus
 import com.Market.Market.enums.CustomerStatus
 import com.Market.Market.modal.BookModel
@@ -35,5 +37,24 @@ fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel {
         price = BigDecimal(this.price ?: previousValue.price.toString()),
         status = previousValue.status,
         customer = previousValue.customer
+    )
+}
+
+fun CustomerModel.toResponse(): CustomerResponse {
+    return  CustomerResponse(
+        id =  this.id,
+        name =  this.name,
+        email =  this.email,
+        status =  this.status
+    )
+}
+
+fun BookModel.toResponse(): BookResponse {
+    return BookResponse(
+        id =  this.id,
+        name =  this.name,
+        price =  this.price,
+        customer =  this.customer,
+        status = this.status
     )
 }
