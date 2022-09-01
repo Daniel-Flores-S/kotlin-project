@@ -4,6 +4,6 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/bookMarket?createDatabaseIfNotExist=true
     username: root
-    password: 35716134da
+    password: 35716134
   jackson:
     default-property-inclusion: non_null

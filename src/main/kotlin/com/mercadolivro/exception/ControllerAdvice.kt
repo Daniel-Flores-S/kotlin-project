@@ -25,26 +25,27 @@ class ControllerAdvice {
         return ResponseEntity(erro, HttpStatus.NOT_FOUND)
     }
 
-     @ExceptionHandler(BadRequestException::class)
+    @ExceptionHandler(BadRequestException::class)
     fun handleBadRequestException(ex: BadRequestException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val erro = ErrorResponse(
-            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.BAD_REQUEST.value(),
             ex.message,
             ex.errorCode,
             null
         )
+
         return ResponseEntity(erro, HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val erro = ErrorResponse(
-            HttpStatus.BAD_REQUEST.value(),
-           Errors.ML0001.message,
-           Errors.ML0001.code,
-            ex.bindingResult.fieldErrors.map { FieldErrorResponse( it.defaultMessage ?: "Invalid", it.field ) }
+            HttpStatus.UNPROCESSABLE_ENTITY.value(),
+            Errors.ML001.message,
+            Errors.ML001.code,
+            ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.defaultMessage ?: "invalid", it.field) }
         )
-        return ResponseEntity(erro, HttpStatus.BAD_REQUEST)
-    }
 
+        return ResponseEntity(erro, HttpStatus.UNPROCESSABLE_ENTITY)
+    }
 }
