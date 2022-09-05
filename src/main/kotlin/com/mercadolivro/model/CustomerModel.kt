@@ -24,7 +24,6 @@ data class CustomerModel(
     @Column
     val password: String,
 
-
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)

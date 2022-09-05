@@ -8,13 +8,12 @@ import com.mercadolivro.model.CustomerModel
 import com.mercadolivro.repository.CustomerRepository
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
-import java.lang.Exception
 
 @Service
 class CustomerService(
-    private val customerRepository: CustomerRepository,
+    val customerRepository: CustomerRepository,
     private val bookService: BookService,
-    private val bCrypt: BCryptPasswordEncoder,
+    private val bCrypt: BCryptPasswordEncoder
 ) {
 
     fun getAll(name: String?): List<CustomerModel> {
