@@ -24,7 +24,5 @@ class AuthenticationFilter(
         } catch (ex: Exception) {
             throw AuthenticationException("Falha ao autenticar", "999")
         }
-
-
     }
 }
