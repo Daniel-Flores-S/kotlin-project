@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service
 class UserDetailsCustomService(
     private val customerRepository: CustomerRepository
 ): UserDetailsService {
+    /* Verifica se customer existe a partir do seu id e returna um UserDetails */
     override fun loadUserByUsername(id: String): UserDetails {
         val customer = customerRepository.findById(id.toInt())
             .orElseThrow { AuthenticationException("Usuario não encontrado", "999") }
+        // Alterando validações do spring
         return UserCustomDetails(customer)
     }
 }

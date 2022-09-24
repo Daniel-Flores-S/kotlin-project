@@ -24,6 +24,7 @@ class SecurityConfig(
     private val jwtUtil: JwtUtil
 ) : WebSecurityConfigurerAdapter() {
 
+    /* Lista de urls sem autenticação */
     private val PUBLIC_MATCHERS = arrayOf<String>()
 
     private val PUBLIC_POST_MATCHERS = arrayOf(
@@ -32,25 +33,39 @@ class SecurityConfig(
 
     private val ADMIN_MATCHERS = arrayOf("/admin/**")
 
+    /* Passando a melhor forma de autenticação a partir do identificador recuperar o usuário
+    * customer */
     override fun configure(auth: AuthenticationManagerBuilder) {
+        /* Passando o Encoder para o spring decodificar ou codificar senha
+        * Para ele conseguir de fato bater as senhas => bCryptPasswordEncoder*/
         auth.userDetailsService(userDetails).passwordEncoder(bCryptPasswordEncoder())
     }
 
     override fun configure(http: HttpSecurity) {
+        /* desativando cors */
         http.cors().and().csrf().disable()
+
+        /* Todas as requisições que chegam devem estar autenticadas */
         http.authorizeRequests()
-            .antMatchers(*PUBLIC_MATCHERS).permitAll()
-            .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
-            .antMatchers(*ADMIN_MATCHERS).hasAnyAuthority(Role.ADMIN.description)
-            .anyRequest().authenticated()
+        /* Rotas sem autenticação obrigatória */
+        .antMatchers(*PUBLIC_MATCHERS).permitAll()
+        .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
+
+         /* Rotas exclusivas para administradores do sistema */
+        .antMatchers(*ADMIN_MATCHERS).hasAnyAuthority(Role.ADMIN.description)
+        .anyRequest().authenticated()
+
+        /* Filtro de autenticaçã passando authenticationManager direto do spring e customerRepository via injeção de dependência linha 22*/
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))
         http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    }
 
-    @Bean
-    fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
+        // requisições independentes as requisições podem ser de usuários diferentes.
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+}
+
+@Bean
+fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
+return BCryptPasswordEncoder()
+}
 
 }
